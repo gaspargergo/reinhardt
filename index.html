@@ -1,0 +1,109 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: black;
+    }
+
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: #212121;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+    } 
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: grey;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+    }
+
+    #text{
+      position: static;
+      font-size: 14px;
+      font-family: Shrikhand, cursive;
+      color: #212121;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      transform: rotate(-25deg);
+      color: white;
+    }
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="colorPixels()">instant <span>ART</span></a>
+    <a onClick="draw('mondrian')"><p id="text">Just like Reinhardt!</p></a>
+
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+
+</center>
+
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+  var sizes = [1,4,9,25,100,400,900,3600,10000,40000,90000,360000]; 
+  var pixelArrayCounter = 2;
+  var pixelSize = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+  var colors = ["#01bf01","#ffff00","#0069ff","#ff0000"];
+
+  function colorPixels(){
+    var x = 0;
+    var y = 0;
+    ctx.clearRect(0, 0, c.width, c.height);
+    for(var i = 0; i < sizes[pixelArrayCounter]; i++){
+      var color = colors[Math.floor(Math.random()*colors.length)];
+      ctx.fillStyle = shadeColor(color, -0.95 );
+      ctx.fillRect(x,y,pixelSize,pixelSize);
+      if(x == c.width-pixelSize){
+        x = 0;
+        y += pixelSize;
+      }
+      else{
+        x += pixelSize;
+      }
+    }
+  }
+  
+  function shadeColor(color, percent) {   //stolen from https://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
+    var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+    return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+}
+
+  </script>
+</body>
+
+</html>
